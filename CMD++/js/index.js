@@ -124,21 +124,21 @@ var CMD = {
       case "Bytes":
         return digits*1;
       case "KB":
-        return formatLargeData((digits*1024)+"Bytes");
+        return CMD.formatLargeData((digits*1024)+"Bytes");
       case "MB":
-        return formatLargeData((digits*1024)+"KB");
+        return CMD.formatLargeData((digits*1024)+"KB");
       case "GB":
-        return formatLargeData((digits*1024)+"MB");
+        return CMD.formatLargeData((digits*1024)+"MB");
       case "TB":
-        return formatLargeData((digits*1024)+"GB");
+        return CMD.formatLargeData((digits*1024)+"GB");
       case "PB":
-        return formatLargeData((digits*1024)+"TB");
+        return CMD.formatLargeData((digits*1024)+"TB");
       case "EB":
-        return formatLargeData((digits*1024)+"PB");
+        return CMD.formatLargeData((digits*1024)+"PB");
       case "ZB":
-        return formatLargeData((digits*1024)+"EB");
+        return CMD.formatLargeData((digits*1024)+"EB");
       case "YB":
-        return formatLargeData((digits*1024)+"ZB");
+        return CMD.formatLargeData((digits*1024)+"ZB");
     }
   },
   //Add data
@@ -505,6 +505,7 @@ $('#input').keyup(function(e) {
       }
       $('#input').val(sSelectedCommand);
     }
+  $("#input").focus();
   })
   //Called when the user first enters the page. 
 $(document).ready(function() {
@@ -517,5 +518,5 @@ $(document).ready(function() {
   }
 
   CMD.respond("Type 'help' to get started.");
-
+  $("#input").focus();
 });
