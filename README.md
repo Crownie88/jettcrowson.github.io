@@ -8,6 +8,11 @@ Welcome to CMD++. This game is still in extremely early development, so if anyth
 ####Attention:
 If your save does not work after an update, try [clearing your local storage on your browser](http://www.ghacks.net/2015/02/05/how-to-clear-web-storage-in-your-browser-of-choice/). I'll try my best to make sure this does not happen though. This also applies if a command says that it is not unlocked.
 
+###Developers read this
+There is a new subreddit for developers.  
+I will add a post on /r/CMDPlusPlus where you can post a comment if you're a contributer.
+Then I will add you to the list of people allowed to post on /r/CMDPPDevelopers
+
 #####Todo:
 - Add upgrades
 - Add virus and antivirus
