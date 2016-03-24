@@ -46,6 +46,7 @@ table {
   text-indent: 15px;
   overflow-y:auto;
 }
+
 body{
   height:100%;
 }
@@ -72,6 +73,99 @@ body{
   margin: auto;
   font-size:20px;
 }
+/*Extra colorschemes here*/
+/*
+Example:
+.coral #cmdWindow,
+.coral #stats,
+.coral #input {background-color: #042029;} Back color
+
+.coral .accent,
+.coral #cmdWindow,
+.coral #stats {color: #268BD2;} Text color
+.coral #input {color: #859900;} Accent color
+.coral #input {border-top-color: #859900;} Accent color for border top.
+*/
+
+/*Coral*/
+.coral #cmdWindow,
+.coral #stats,
+.coral #input {background-color: #042029;}
+.coral #cmdWindow,
+.coral #stats {color: #268BD2;}
+.coral .accent,
+.coral #input {color: #859900;}
+.coral #input {border-top-color: #859900;}
+
+/*Naked*/
+.naked #cmdWindow,
+.naked #stats,
+.naked #input {background-color: #b3c2bf;}
+.naked #cmdWindow,
+.naked #stats {color: #3b3a36;}
+.naked .accent,
+.naked #input {color: #27588F;}
+.naked #input {border-top-color: #27588F;}
+
+/*Ocean*/
+.ocean #cmdWindow,
+.ocean #stats,
+.ocean #input {background-color: #89bdd3;}
+.ocean #cmdWindow,
+.ocean #stats {color: white;}
+.ocean .accent,
+.ocean #input {color: #105BAD;}
+.ocean #input {border-top-color: #105BAD;}
+
+/*Hacker*/
+.hacker #cmdWindow,
+.hacker #stats,
+.hacker #input {background-color: black;}
+.hacker #cmdWindow,
+.hacker #stats {color: #82B600;}
+.hacker .accent,
+.hacker #input {color: #887F32;}
+.hacker #input {border-top-color: #887F32;}
+
+/*Fire*/
+.fire #cmdWindow,
+.fire #stats,
+.fire #input {background-color: #e62739;}
+.fire #cmdWindow,
+.fire #stats {color: white;}
+.fire .accent,
+.fire #input {color: yellow;}
+.fire #input {border-top-color: yellow;}
+
+/*Mint*/
+.mint #cmdWindow,
+.mint #stats,
+.mint #input {background-color: #3F4531;}
+.mint #cmdWindow,
+.mint #stats {color: #91F9E5;}
+.mint .accent,
+.mint #input {color: #7CFFA6;}
+.mint #input {border-top-color: #7CFFA6;}
+
+/*Invert*/
+.invert #cmdWindow,
+.invert #stats,
+.invert #input {background-color: white;}
+.invert #cmdWindow,
+.invert #stats {color: black;}
+.invert .accent,
+.invert #input {color: black;}
+.invert #input {border-top-color: black;}
+
+/*Default*/
+.default #cmdWindow,
+.default #stats,
+.default #input {background-color: black;}
+.default #cmdWindow,
+.default #stats {color: white;}
+.default .accent,
+.default #input {color: white;}
+.default #input {border-top-color: white;}
 
 input:focus,
 select:focus,
