@@ -13,6 +13,7 @@ If your save does not work after an update, try [clearing your local storage on 
 - Add virus and antivirus
 - Add upgrades, both those bought with data or money
 - Add a `dataStream` command that is more funny than useful. Example: [Name] likes [noun]: Jeremy likes shwarma. This would be so the user can "sample" their data.
+- Overhaul javascript to make it easier to maintain commands and upgrades (will work on it this weekend Crownie88) 
 - PLEASE COMMIT MORE TODOS
 
 #####Version History
