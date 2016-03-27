@@ -57,6 +57,10 @@ body{
   font-family: "Courier New", "Courier", monospace;
   margin: auto;
   padding-top:15px;
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/master
 }
 
 #input {
@@ -91,7 +95,13 @@ button:focus {
   font-family: "Courier New", "Courier", monospace;
   color: white;
 }
+<<<<<<< HEAD
+.accent{
+  color:white;
+}
+=======
 
+>>>>>>> origin/master
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -124,4 +134,8 @@ button:focus {
 }
 ::-webkit-scrollbar-corner {
   background: transparent;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/master
