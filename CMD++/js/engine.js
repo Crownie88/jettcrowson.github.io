@@ -26,21 +26,21 @@ function formatLargeData(str) {
         case "Bytes":
             return digits * 1;
         case "KB":
-            return CMD.formatLargeData((digits * 1024) + "Bytes");
+            return formatLargeData((digits * 1024) + "Bytes");
         case "MB":
-            return CMD.formatLargeData((digits * 1024) + "KB");
+            return formatLargeData((digits * 1024) + "KB");
         case "GB":
-            return CMD.formatLargeData((digits * 1024) + "MB");
+            return formatLargeData((digits * 1024) + "MB");
         case "TB":
-            return CMD.formatLargeData((digits * 1024) + "GB");
+            return formatLargeData((digits * 1024) + "GB");
         case "PB":
-            return CMD.formatLargeData((digits * 1024) + "TB");
+            return formatLargeData((digits * 1024) + "TB");
         case "EB":
-            return CMD.formatLargeData((digits * 1024) + "PB");
+            return formatLargeData((digits * 1024) + "PB");
         case "ZB":
-            return CMD.formatLargeData((digits * 1024) + "EB");
+            return formatLargeData((digits * 1024) + "EB");
         case "YB":
-            return CMD.formatLargeData((digits * 1024) + "ZB");
+            return formatLargeData((digits * 1024) + "ZB");
     }
 
 }
