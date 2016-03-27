@@ -141,7 +141,7 @@ buyCommand: function(toBuy) {
     if (commands[toBuy] !== undefined) {
 
       //Make sure there is enough data to buy the command.
-      if (CMD.data >= commands[toBuy].price) {
+      if (CMD.data >= commands[toBuy].cost) {
 
         //Make sure it hasn't been unlocked already
         if (commands[toBuy].unlocked !== true) {
@@ -149,7 +149,7 @@ buyCommand: function(toBuy) {
           //Unlock the command under the CMD.commandUnlocked array
           commands[toBuy].unlocked = true;
           //Spend data on unlocking this command
-          addData(commands[toBuy].price * -1);
+          addData(commands[toBuy].cost * -1);
           respond("Command unlocked: " + toBuy);
 
         } else {
