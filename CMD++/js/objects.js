@@ -17,19 +17,19 @@ var CMD = {
 //List commands here and then add them to gameCommands.js
 var commands = {
 
-	help: {name:"help", unlocked:true, cost:0},
-	mineData: {name:"mineData", unlocked:true, cost:0},
-	save: {name:"save",unlocked:true, cost:0},
-	autoMine: {name:"autoMine", unlocked:false, cost:20},
-	sellData: {name:"sellData", unlocked:false, cost:250},
-	buyData: {name:"buyData", unlocked:false, cost:150},
-	buyCommand: {name:"buyCommand", unlocked:true, cost:0},
-	upgradeStorage: {name:"upgradeStorage", unlocked:true, cost:0},
-	clear: {name:"clear",unlocked:true, cost:0},
-	load: {name:"load", unlocked:true, cost:0},
-	currentStorage: {name:"currentStorage", unlocked:true, cost:0},
-	upgradeMine: {name:"upgradeMine", unlocked:true, cost:0},
-	colorScheme: {name:"colorScheme", unlocked:false, cost:5120}
+	HELP: {name:"help", unlocked:true, cost:0},
+	MINEDATA: {name:"mineData", unlocked:true, cost:0},
+	SAVE: {name:"save",unlocked:true, cost:0},
+	AUTOMINE: {name:"autoMine", unlocked:false, cost:20},
+	SELLDATA: {name:"sellData", unlocked:false, cost:250},
+	BUYDATA: {name:"buyData", unlocked:false, cost:150},
+	BUYCOMMAND: {name:"buyCommand", unlocked:true, cost:0},
+	UPGRADESTORAGE: {name:"upgradeStorage", unlocked:true, cost:0},
+	CLEAR: {name:"clear",unlocked:true, cost:0},
+	LOAD: {name:"load", unlocked:true, cost:0},
+	CURRENTSTORAGE: {name:"currentStorage", unlocked:true, cost:0},
+	UPGRADEMINE: {name:"upgradeMine", unlocked:true, cost:0},
+	COLORSCHEME: {name:"colorScheme", unlocked:false, cost:5120}
 
 }
 

@@ -20,41 +20,41 @@ $(document).ready(function() {
 //Create your game commands here
 var gameCommands = {
 
-help: function(toHelp) {
+    HELP: function(toHelp) {
 
       //Check if help was passed with an argument or not. If it was, do the command specific help, otherwise do the command list generic help.
       if (toHelp !== undefined) {
 
         switch (toHelp) {
-          case "help":
+          case "HELP":
             respond(toHelp + ": Gives list of commands or specific instructions for commands.");
             respond("To use: help, help [command]");
             break;
-          case "mineData":
+          case "MINEDATA":
             respond(toHelp + ": Increments data by your increment amount. The default is 1 byte.");
             respond("To use: mineData");
             break;
-          case "save":
+          case "SAVE":
             respond(toHelp + ": Saves files to your browser so you can load the game.");
             respond("To use: save");
             break;
-          case "load":
+          case "LOAD":
             respond(toHelp + ": Reloads your saved data files.")
             respond("To use: load");
             break;
-          case "autoMine":
+          case "AUTOMINE":
             respond(toHelp + ": Every second, increments your data by the auto increment amount. Default is 1 byte per second.");
             respond("To use: autoMine");
             break;
-          case "sellData":
+          case "SELLDATA":
             respond(toHelp + ": Converts data to money. The conversion is 1 byte for $1, but the data deteriorates during transfer.");
             respond("To use: sellData [amount with unit, 1MB, 500Bytes, 88TB, etc]");
             break;
-          case "buyData":
+          case "BUYDATA":
             respond(toHelp + ": Converts money to data. The conversion is 1 byte for $2.");
             respond("To use: buyData [amount]");
             break;
-          case "buyCommand":
+          case "BUYCOMMAND":
             var listOfAvailable = [];
             respond(toHelp + ": Purchases and unlocks a command.");
 
@@ -62,14 +62,14 @@ help: function(toHelp) {
 
               if (commands[com].unlocked === false) {
 
-                listOfAvailable.push("<span class='accent'>"+com + ":</span> " + (formatBytes(commands[com].cost)));
+                listOfAvailable.push("<span class='accent'>"+commands[com].name + ":</span> " + (formatBytes(commands[com].cost)));
               
               }
             });
             respond("Available commands: " + listOfAvailable.join(", "));
             respond("To use: buyCommand [command]");
             break;
-          case "upgradeStorage":
+          case "UPGRADESTORAGE":
             var li = [];
             var storageLi = Object.keys(storages);
 
@@ -82,20 +82,20 @@ help: function(toHelp) {
             respond("Available upgrades: " + li.join(",    "));
             respond("To use: upgradeStorage [storage device]");
             break;
-          case "currentStorage":
+          case "CURRENTSTORAGE":
             respond(toHelp + ": Check how much data you can hold.");
             respond("To use: currentStorage");
             break;
-          case "clear":
+          case "CLEAR":
             respond(toHelp + ": Clears the text off the screen.");
             respond("To use: clear");
             break;
-          case "upgradeMine":
+          case "UPGRADEMINE":
             respond(toHelp + ": Increases your mineData increment.");
             respond("Current increment: "+formatBytes(CMD.increment)+". Next price: $"+CMD.incCost);
             respond("To use: upgradeMine");
           break;
-          case "colorScheme":
+          case "COLORSCHEME":
             respond(toHelp + ": Changes the theme.");
             respond("Available themes: "+Object.keys(themes).join(", "));
             respond("To use: colorScheme [scheme]");
@@ -124,7 +124,7 @@ help: function(toHelp) {
         respond("<span class='accent'>########################################</span>");
       }},
 
-clear: function(){
+CLEAR: function(){
 
 	respond("Clearing...")
 	setTimeout(function() {
@@ -133,7 +133,7 @@ clear: function(){
 
 },
 
-buyCommand: function(toBuy) {
+BUYCOMMAND: function(toBuy) {
 
   if (toBuy !== undefined) {
 
@@ -175,7 +175,7 @@ buyCommand: function(toBuy) {
 
   }},
 
-upgradeMine: function(){
+UPGRADEMINE: function(){
 
   if(CMD.money>=CMD.incCost){
 
@@ -191,7 +191,7 @@ upgradeMine: function(){
 	}
 },
 
-mineData: function() {
+MINEDATA: function() {
 
   if (checkStorage()&&(CMD.data+CMD.increment)<=formatLargeData(storages[CMD.currentStorage].size)) {
 
@@ -204,7 +204,7 @@ mineData: function() {
 
   }},
 
-buyData: function(amountToBuy) {
+BUYDATA: function(amountToBuy) {
 
   //For some reason the amount to buy was turning into a string, so I added Number() to convert it back
   Number(amountToBuy);
@@ -232,7 +232,7 @@ buyData: function(amountToBuy) {
   }
 },
 
-sellData: function(amount) {
+SELLDATA: function(amount) {
 
   if (amount !== undefined) {
 
@@ -266,20 +266,20 @@ sellData: function(amount) {
   }
 },
 
-currentStorage: function() {
+CURRENTSTORAGE: function() {
 
   respond("Your " + CMD.currentStorage + " can hold " + storages[CMD.currentStorage].size);
 
 },
 
-autoMine: function() {
+AUTOMINE: function() {
 
   CMD.autoIncrement = 1;
   respond("Automatic mining begining at a rate of " + CMD.autoIncrement + " byte per second.");
 
 },
 
-upgradeStorage: function(toUpgrade) {
+UPGRADESTORAGE: function(toUpgrade) {
 
   if (toUpgrade !== undefined) {
 
@@ -307,7 +307,7 @@ upgradeStorage: function(toUpgrade) {
   }
 },
 
-load: function() {
+LOAD: function() {
 
   //Make sure that the localstorage is not corrupted (This is not perfect, you may have to clear it with a new update)
   if (localStorage.getItem("CMD") !== "null" && localStorage.getItem("commands") !== "null") {
@@ -328,7 +328,7 @@ load: function() {
   }
 },
 
-save: function(respondSave) {
+SAVE: function(respondSave) {
 
   if (typeof(Storage) !== "undefined") {
 
@@ -351,7 +351,7 @@ save: function(respondSave) {
   }
 },
 
-colorScheme: function(theme){
+COLORSCHEME: function(theme){
 
 	if(theme !== undefined){
 

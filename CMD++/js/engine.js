@@ -70,8 +70,10 @@ function runCommand(commandToRun) {
 
     //Secret command to add 10% of your storage capacity. This is mostly just for testing what works. I'll remove this before release.
     respond(commandToRun, '$');
+    commandToRun = commandToRun.toUpperCase();
     if (commandToRun === "poppies") {
         CMD.data += formatLargeData(storages[CMD.currentStorage].size) / 10;
+        return;
     }
 
     //Break away args
