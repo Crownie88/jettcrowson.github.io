@@ -10,12 +10,21 @@ $(document).ready(function() {
 
   } else {
 
-    gameCommands.load();
+    gameCommands.LOAD();
 
   }
   respond("Type 'help' to get started.");
   $("#input").focus();
 });
+
+function GetNextUpgrade(upgradeType){
+    result = null
+    for (i = 0; i < Object.keys(upgradeType).length; i++){
+        if (!upgradeType[Object.keys(upgradeType)[i]].unlocked){
+            return upgradeType[Object.keys(upgradeType)[i]];
+        }
+    }
+}
 
 //Create your game commands here
 var gameCommands = {
@@ -100,6 +109,14 @@ var gameCommands = {
             respond("Available themes: "+Object.keys(themes).join(", "));
             respond("To use: colorScheme [scheme]");
           break;
+          case "HARDWARESHOP":
+            respond(toHelp + ": Buy upgrades for your computer.");
+            respond("Available arguments:");
+            var cpuPrice = GetNextUpgrade(upgrades.CPU);
+            var ramPrice = GetNextUpgrade(upgrades.RAM);
+            respond("BuyCPU: " + ((cpuPrice != null) ? "$" + cpuPrice.price : "fully upgraded") + ", BuyRAM: " + ((ramPrice != null) ? "$" + ramPrice.price : "fully upgraded"));
+            respond("CPU increases the speed of autoMine, RAM increases the amount of data mined by autoMine");
+          break;
           default:
             respond("Command not found or no help is available. Type 'help' with no arguments to see a list of commands.");
         }
@@ -110,11 +127,8 @@ var gameCommands = {
         //Only view commands that are available under the CMD.commandUnlocked array
 
         Object.keys(commands).forEach(function(obj){
-
         	if(commands[obj].unlocked){
-
             	availableCommands.push(commands[obj].name); 
-
         	}
         });
 
@@ -125,12 +139,10 @@ var gameCommands = {
       }},
 
 CLEAR: function(){
-
 	respond("Clearing...")
 	setTimeout(function() {
 		$("#responses").html("");
 	}, 1500);
-
 },
 
 BUYCOMMAND: function(toBuy) {
@@ -273,37 +285,28 @@ CURRENTSTORAGE: function() {
 },
 
 AUTOMINE: function() {
-
   CMD.autoIncrement = 1;
   respond("Automatic mining begining at a rate of " + CMD.autoIncrement + " byte per second.");
-
+  SetAutoMineAmount();
+  IntervalHandler.removeInterval("autoMine");
+  IntervalHandler.addInterval("autoMine",AutoMineTick, GetAutoMineSpeed());
 },
 
 UPGRADESTORAGE: function(toUpgrade) {
-
   if (toUpgrade !== undefined) {
-
     Object.keys(storages).forEach(function(obj){
-
       if (storages[obj].name === toUpgrade) {
-
         if (CMD.money >= storages[obj].price) {
-
           CMD.money -= storages[obj].price;
           CMD.currentStorage = storages[obj].name;
           respond("Storage upgraded to " + CMD.currentStorage + " with a capacity of " + storages[obj].size);
-        
         } else {
-
           respond("Not enough money or you may have already unlocked this storage device.");
-
         }
       }
 	});
   } else {
-
     respond("Please enter an argument. For help type 'help upgradeStorage'");
-
   }
 },
 
@@ -315,10 +318,16 @@ LOAD: function() {
     //Load save.
     CMD = JSON.parse(localStorage.getItem("CMD"));
     commands = JSON.parse(localStorage.getItem("commands"));
+    if (commands.AUTOMINE.unlocked){
+        // respond("autoMine is unlocked");
+    }else{
+        // respond(GetAutoMineSpeed());
+        // respond("autoMine is NOT unlocked!!");
+    }
     themes = JSON.parse(localStorage.getItem("themes"));
     storages = JSON.parse(localStorage.getItem("storages"));
     respond("Save loaded.");
-    gameCommands.colorScheme(CMD.currScheme);
+    gameCommands.COLORSCHEME(CMD.currScheme);
   
   } else {
 
@@ -353,32 +362,66 @@ SAVE: function(respondSave) {
 
 COLORSCHEME: function(theme){
 
-	if(theme !== undefined){
+    if(theme !== undefined){
 
-		var schemes = Object.keys(themes);
+        var schemes = Object.keys(themes);
 
-		schemes.forEach(function(q){
+        schemes.forEach(function(q){
 
-			if(theme===q){
+            if(theme===q){
 
-				var accent = themes[q].accent;
-				$("#"+CMD.currScheme).remove();
-				$("head").append("<link id='"+theme+"' rel='stylesheet' href='css/themes/" + theme + ".css' />");
-				$("head").append("<style>.accent{color:"+accent+";}#input{border-top:1px solid "+accent+";}</style>");
-				CMD.currScheme=theme;
-				respond("Scheme changed to "+theme);
-			}
+                var accent = themes[q].accent;
+                $("#"+CMD.currScheme).remove();
+                $("head").append("<link id='"+theme+"' rel='stylesheet' href='css/themes/" + theme + ".css' />");
+                $("head").append("<style>.accent{color:"+accent+";}#input{border-top:1px solid "+accent+";}</style>");
+                CMD.currScheme=theme;
+                respond("Scheme changed to "+theme);
+            }
 
-		});
-	}else{
+        });
+    }else{
 
-		respond("Please enter an argument. For a list of schemes type, 'help colorScheme'");
-	
-	}
+        respond("Please enter an argument. For a list of schemes type, 'help colorScheme'");
+    
+    }
+},
+HARDWARESHOP: function(toBuy){
+    
+    if (toBuy !== undefined){
+        var upgradeType = null;
+        switch (toBuy){
+            case "BUYCPU":
+                upgradeType = upgrades.CPU;
+            break;
+            case "BUYRAM":
+                upgradeType = upgrades.RAM;
+            break;
+            
+        }
+        var upgrade = GetNextUpgrade(upgradeType);
+        console.log("im here");
+        if (upgradeType == null){
+            respond("Unknown arguement. For a list of arguments type, 'help hardwareShop'");
+            return;
+        }else if(upgrade == null){
+            respond("No new upgrade available");
+        }
+        if (CMD.money >= upgrade.price){
+            addMoney(upgrade.price*-1);
+            upgrade.unlocked = true;
+            //only perform this code if automine is running!
+            if (CMD.autoIncrement > 0){
+                //Calculate automine tick value in case of RAM upgrade.
+                SetAutoMineAmount();
+                //reset interval with new speed in case op CPU upgrade.
+                IntervalHandler.removeInterval("autoMine");
+                IntervalHandler.addInterval("autoMine",AutoMineTick, GetAutoMineSpeed());                
+            }
+        }else{
+            respond("You don't have enough money to buy this upgrade.")
+        }
+    }else{
+        respond("Please enter an argument. For a list of arguments type, 'help hardwareShop'");
+    }
 }
 }
-
-
-
-
-

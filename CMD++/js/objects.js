@@ -11,7 +11,9 @@ var CMD = {
 	data: 0,
 	counter: 0,
 	currentStorage: "selectronTube",
-	currScheme: "default"
+	currScheme: "default",
+    autoMineSpeed: 2000,
+    autoMineAmount: 1
 }
 
 //List commands here and then add them to gameCommands.js
@@ -29,7 +31,8 @@ var commands = {
 	LOAD: {name:"load", unlocked:true, cost:0},
 	CURRENTSTORAGE: {name:"currentStorage", unlocked:true, cost:0},
 	UPGRADEMINE: {name:"upgradeMine", unlocked:true, cost:0},
-	COLORSCHEME: {name:"colorScheme", unlocked:false, cost:5120}
+	COLORSCHEME: {name:"colorScheme", unlocked:false, cost:5120},
+    HARDWARESHOP: {name:"hardwareShop", unlocked:true, cost:0}
 
 }
 
@@ -66,5 +69,34 @@ var storages = {
 	smallAfricanCountry: {name:"smallAfricanCountry", size:"512ZB", price:400000000000000, selected:false},
 	alienSpaceArray: {name:"alienSpaceArray", size:"100000YB", price:3000000000000000, selected:false},
 	enslaveHumans: {name:"enslaveHumans", size:"9999999999999999YB", price:9007199254740991, selected:false}
+}
 
+var upgrades = {
+    CPU: {
+        Tier1: {name: "CPU Tier 1", speedMultiplier: 0.5, price: 100, unlocked: false},
+        Tier2: {name: "CPU Tier 2", speedMultiplier: 0.5, price: 1000, unlocked: false},
+        Tier3: {name: "CPU Tier 3", speedMultiplier: 0.5, price: 10000, unlocked: false}
+    },
+    RAM: {
+        Tier1: {name: "RAM Tier 1", autoMineMultiplier: 2, price: 150, unlocked: false},
+        Tier2: {name: "RAM Tier 2", autoMineMultiplier: 2.5, price: 1500, unlocked: false},
+        Tier3: {name: "RAM Tier 3", autoMineMultiplier: 2, price: 15000, unlocked: false}
+    }
+}
+
+//Intervals
+function NewIntervalHandler(){
+    this.intervalList = [];
+    this.addInterval = function (cName, func, timeOut) {
+        intervalList.push({name: cName, handle: setInterval(func, timeOut)});
+    };
+    this.removeInterval = function (name) {
+                            intervalList.forEach(function(obj){
+                                if (obj.name === name){
+                                    clearInterval(obj.handle);
+                                    return;
+                                }
+                            })
+                        };
+    return this;
 }

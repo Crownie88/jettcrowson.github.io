@@ -4,6 +4,8 @@
 
 ***/
 
+var IntervalHandler = NewIntervalHandler();
+
 //Turns bytes into higher values such as 34GB, 5KB, etc.
 function formatBytes(bytes, decimals) {
 
@@ -71,8 +73,13 @@ function runCommand(commandToRun) {
     //Secret command to add 10% of your storage capacity. This is mostly just for testing what works. I'll remove this before release.
     respond(commandToRun, '$');
     commandToRun = commandToRun.toUpperCase();
-    if (commandToRun === "poppies") {
+    if (commandToRun === "POPPIES") {
         CMD.data += formatLargeData(storages[CMD.currentStorage].size) / 10;
+        return;
+    }
+    //secret command to add $100k for testing purposes.
+    if (commandToRun == "MONEYZ"){
+        CMD.money += 100000;
         return;
     }
 
@@ -110,10 +117,8 @@ function runCommand(commandToRun) {
 
 //Adds data
 function addData(amount) {
-
     CMD.data += amount;
     update();
-
 }
 
 //Adds money
@@ -221,34 +226,51 @@ $(document).keyup(function(e) {
 });
 
 //Game loop
-setInterval(function() {
-
+function GameLoop(){
     CMD.counter++;
-
     //Save it every 10 seconds
     if (CMD.counter % 10 === 0) {
-
-        gameCommands.save(false);
-
+        gameCommands.SAVE(false);
+        IntervalHandler.removeInterval("gameLoop");
     }
-
-    //See if the storage is filled up
     if (checkStorage()) {
-
         addData(CMD.autoIncrement);
-
     } else {
-
         update();
-
         if (CMD.counter % 10 === 0) {
-
             //If it is filled, every 10 seconds remind you to upgrade.
             respond("Please upgrade your storage with upgradeStorage.");
-
         }
     }
-}, 1000);
+};
+IntervalHandler.addInterval("gameLoop",GameLoop, 1000);
+
+function GetAutoMineSpeed(){
+    var Speed = 2000;
+    // respond(upgrades.CPU.Tier1.name);
+    for (i = 0; i < Object.keys(upgrades.CPU).length; i++){
+        if (upgrades.CPU[Object.keys(upgrades.CPU)[i]].unlocked){
+            Speed *= upgrades.CPU[Object.keys(upgrades.CPU)[i]].speedMultiplier;
+        }
+    }
+    return Speed;
+}
+
+function SetAutoMineAmount(){
+    var amount = 1;
+    for (i = 0; i < Object.keys(upgrades.RAM).length; i++){
+        if (upgrades.RAM[Object.keys(upgrades.RAM)[i]].unlocked){
+            amount *= upgrades.RAM[Object.keys(upgrades.RAM)[i]].autoMineMultiplier;
+        }
+    }
+    CMD.autoMineAmount = amount;
+}
+
+function AutoMineTick(){
+    if (checkStorage()) {
+        addData(CMD.autoMineAmount);
+    }
+}
 
 //These are all for formatting numbers such as 1000 to 1K
 var nLog = Math.log(10);
