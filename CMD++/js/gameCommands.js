@@ -10,51 +10,60 @@ $(document).ready(function() {
 
   } else {
 
-    gameCommands.load();
+    gameCommands.LOAD();
 
   }
   respond("Type 'help' to get started.");
   $("#input").focus();
 });
 
+function GetNextUpgrade(upgradeType){
+    result = null
+    for (i = 0; i < Object.keys(upgradeType).length; i++){
+        if (!upgradeType[Object.keys(upgradeType)[i]].unlocked){
+            return upgradeType[Object.keys(upgradeType)[i]];
+        }
+    }
+}
+
 //Create your game commands here
 var gameCommands = {
 
-help: function(toHelp) {
+    HELP: function(toHelp) {
 
       //Check if help was passed with an argument or not. If it was, do the command specific help, otherwise do the command list generic help.
       if (toHelp !== undefined) {
 
         switch (toHelp) {
-          case "help":
+          case "HELP":
             respond(toHelp + ": Gives list of commands or specific instructions for commands.");
             respond("To use: help, help [command]");
             break;
-          case "mineData":
+          case "MINEDATA":
             respond(toHelp + ": Increments data by your increment amount. The default is 1 byte.");
             respond("To use: mineData");
             break;
-          case "save":
+          case "SAVE":
             respond(toHelp + ": Saves files to your browser so you can load the game.");
             respond("To use: save");
             break;
-          case "load":
+          case "LOAD":
             respond(toHelp + ": Reloads your saved data files.")
             respond("To use: load");
             break;
-          case "autoMine":
+          case "AUTOMINE":
             respond(toHelp + ": Every second, increments your data by the auto increment amount. Default is 1 byte per second.");
             respond("To use: autoMine");
             break;
-          case "sellData":
+          case "SELLDATA":
             respond(toHelp + ": Converts data to money. The conversion is 1 byte for $1, but the data deteriorates during transfer.");
             respond("To use: sellData [amount with unit, 1MB, 500Bytes, 88TB, etc]");
             break;
-          case "buyData":
+          case "BUYDATA":
             respond(toHelp + ": Converts money to data. The conversion is 1 byte for $2.");
             respond("To use: buyData [amount]");
             break;
-          case "buyCommand":
+          case "BUYCOMMAND":
             var listOfAvailable = [];
             respond(toHelp + ": Purchases and unlocks a command.");
 
@@ -62,14 +71,14 @@ help: function(toHelp) {
 
               if (commands[com].unlocked === false) {
 
-                listOfAvailable.push("<span class='accent'>"+com + ":</span> " + (formatBytes(commands[com].cost)));
+                listOfAvailable.push("<span class='accent'>"+commands[com].name + ":</span> " + (formatBytes(commands[com].cost)));
               
               }
             });
             respond("Available commands: " + listOfAvailable.join(", "));
             respond("To use: buyCommand [command]");
             break;
-          case "upgradeStorage":
+          case "UPGRADESTORAGE":
             var li = [];
             var storageLi = Object.keys(storages);
 
@@ -82,23 +91,31 @@ help: function(toHelp) {
             respond("Available upgrades: " + li.join(",    "));
             respond("To use: upgradeStorage [storage device]");
             break;
-          case "currentStorage":
+          case "CURRENTSTORAGE":
             respond(toHelp + ": Check how much data you can hold.");
             respond("To use: currentStorage");
             break;
-          case "clear":
+          case "CLEAR":
             respond(toHelp + ": Clears the text off the screen.");
             respond("To use: clear");
             break;
-          case "upgradeMine":
+          case "UPGRADEMINE":
             respond(toHelp + ": Increases your mineData increment.");
             respond("Current increment: "+formatBytes(CMD.increment)+". Next price: $"+CMD.incCost);
             respond("To use: upgradeMine");
           break;
-          case "colorScheme":
+          case "COLORSCHEME":
             respond(toHelp + ": Changes the theme.");
             respond("Available themes: "+Object.keys(themes).join(", "));
             respond("To use: colorScheme [scheme]");
+          break;
+          case "HARDWARESHOP":
+            respond(toHelp + ": Buy upgrades for your computer.");
+            respond("Available arguments:");
+            var cpuPrice = GetNextUpgrade(upgrades.CPU);
+            var ramPrice = GetNextUpgrade(upgrades.RAM);
+            respond("BuyCPU: " + ((cpuPrice != null) ? "$" + cpuPrice.price : "fully upgraded") + ", BuyRAM: " + ((ramPrice != null) ? "$" + ramPrice.price : "fully upgraded"));
+            respond("CPU increases the speed of autoMine, RAM increases the amount of data mined by autoMine");
           break;
           default:
             respond("Command not found or no help is available. Type 'help' with no arguments to see a list of commands.");
@@ -110,11 +127,8 @@ help: function(toHelp) {
         //Only view commands that are available under the CMD.commandUnlocked array
 
         Object.keys(commands).forEach(function(obj){
-
         	if(commands[obj].unlocked){
-
             	availableCommands.push(commands[obj].name); 
-
         	}
         });
 
@@ -124,16 +138,14 @@ help: function(toHelp) {
         respond("<span class='accent'>########################################</span>");
       }},
 
-clear: function(){
-
+CLEAR: function(){
 	respond("Clearing...")
 	setTimeout(function() {
 		$("#responses").html("");
 	}, 1500);
-
 },
 
-buyCommand: function(toBuy) {
+BUYCOMMAND: function(toBuy) {
 
   if (toBuy !== undefined) {
 
@@ -175,7 +187,7 @@ buyCommand: function(toBuy) {
 
   }},
 
-upgradeMine: function(){
+UPGRADEMINE: function(){
 
   if(CMD.money>=CMD.incCost){
 
@@ -191,7 +203,7 @@ upgradeMine: function(){
 	}
 },
 
-mineData: function() {
+MINEDATA: function() {
 
   if (checkStorage()&&(CMD.data+CMD.increment)<=formatLargeData(storages[CMD.currentStorage].size)) {
 
@@ -204,7 +216,7 @@ mineData: function() {
 
   }},
 
-buyData: function(amountToBuy) {
+BUYDATA: function(amountToBuy) {
 
   //For some reason the amount to buy was turning into a string, so I added Number() to convert it back
   Number(amountToBuy);
@@ -232,7 +244,7 @@ buyData: function(amountToBuy) {
   }
 },
 
-sellData: function(amount) {
+SELLDATA: function(amount) {
 
   if (amount !== undefined) {
 
@@ -266,48 +278,39 @@ sellData: function(amount) {
   }
 },
 
-currentStorage: function() {
+CURRENTSTORAGE: function() {
 
   respond("Your " + CMD.currentStorage + " can hold " + storages[CMD.currentStorage].size);
 
 },
 
-autoMine: function() {
-
+AUTOMINE: function() {
   CMD.autoIncrement = 1;
   respond("Automatic mining begining at a rate of " + CMD.autoIncrement + " byte per second.");
-
+  SetAutoMineAmount();
+  IntervalHandler.removeInterval("autoMine");
+  IntervalHandler.addInterval("autoMine",AutoMineTick, GetAutoMineSpeed());
 },
 
-upgradeStorage: function(toUpgrade) {
-
+UPGRADESTORAGE: function(toUpgrade) {
   if (toUpgrade !== undefined) {
-
     Object.keys(storages).forEach(function(obj){
-
       if (storages[obj].name === toUpgrade) {
-
         if (CMD.money >= storages[obj].price) {
-
           CMD.money -= storages[obj].price;
           CMD.currentStorage = storages[obj].name;
           respond("Storage upgraded to " + CMD.currentStorage + " with a capacity of " + storages[obj].size);
-        
         } else {
-
           respond("Not enough money or you may have already unlocked this storage device.");
-
         }
       }
 	});
   } else {
-
     respond("Please enter an argument. For help type 'help upgradeStorage'");
-
   }
 },
 
-load: function() {
+LOAD: function() {
 
   //Make sure that the localstorage is not corrupted (This is not perfect, you may have to clear it with a new update)
   if (localStorage.getItem("CMD") !== "null" && localStorage.getItem("commands") !== "null") {
@@ -315,10 +318,16 @@ load: function() {
     //Load save.
     CMD = JSON.parse(localStorage.getItem("CMD"));
     commands = JSON.parse(localStorage.getItem("commands"));
+    if (commands.AUTOMINE.unlocked){
+        // respond("autoMine is unlocked");
+    }else{
+        // respond(GetAutoMineSpeed());
+        // respond("autoMine is NOT unlocked!!");
+    }
     themes = JSON.parse(localStorage.getItem("themes"));
     storages = JSON.parse(localStorage.getItem("storages"));
     respond("Save loaded.");
-    gameCommands.colorScheme(CMD.currScheme);
+    gameCommands.COLORSCHEME(CMD.currScheme);
   
   } else {
 
@@ -328,7 +337,7 @@ load: function() {
   }
 },
 
-save: function(respondSave) {
+SAVE: function(respondSave) {
 
   if (typeof(Storage) !== "undefined") {
 
@@ -351,34 +360,68 @@ save: function(respondSave) {
   }
 },
 
-colorScheme: function(theme){
+COLORSCHEME: function(theme){
 
-	if(theme !== undefined){
+    if(theme !== undefined){
 
-		var schemes = Object.keys(themes);
+        var schemes = Object.keys(themes);
 
-		schemes.forEach(function(q){
+        schemes.forEach(function(q){
 
-			if(theme===q){
+            if(theme===q){
 
-				var accent = themes[q].accent;
-				$("#"+CMD.currScheme).remove();
-				$("head").append("<link id='"+theme+"' rel='stylesheet' href='css/themes/" + theme + ".css' />");
-				$("head").append("<style>.accent{color:"+accent+";}#input{border-top:1px solid "+accent+";}</style>");
-				CMD.currScheme=theme;
-				respond("Scheme changed to "+theme);
-			}
+                var accent = themes[q].accent;
+                $("#"+CMD.currScheme).remove();
+                $("head").append("<link id='"+theme+"' rel='stylesheet' href='css/themes/" + theme + ".css' />");
+                $("head").append("<style>.accent{color:"+accent+";}#input{border-top:1px solid "+accent+";}</style>");
+                CMD.currScheme=theme;
+                respond("Scheme changed to "+theme);
+            }
 
-		});
-	}else{
+        });
+    }else{
 
-		respond("Please enter an argument. For a list of schemes type, 'help colorScheme'");
-	
-	}
+        respond("Please enter an argument. For a list of schemes type, 'help colorScheme'");
+    
+    }
+},
+HARDWARESHOP: function(toBuy){
+    
+    if (toBuy !== undefined){
+        var upgradeType = null;
+        switch (toBuy){
+            case "BUYCPU":
+                upgradeType = upgrades.CPU;
+            break;
+            case "BUYRAM":
+                upgradeType = upgrades.RAM;
+            break;
+            
+        }
+        var upgrade = GetNextUpgrade(upgradeType);
+        console.log("im here");
+        if (upgradeType == null){
+            respond("Unknown arguement. For a list of arguments type, 'help hardwareShop'");
+            return;
+        }else if(upgrade == null){
+            respond("No new upgrade available");
+        }
+        if (CMD.money >= upgrade.price){
+            addMoney(upgrade.price*-1);
+            upgrade.unlocked = true;
+            //only perform this code if automine is running!
+            if (CMD.autoIncrement > 0){
+                //Calculate automine tick value in case of RAM upgrade.
+                SetAutoMineAmount();
+                //reset interval with new speed in case op CPU upgrade.
+                IntervalHandler.removeInterval("autoMine");
+                IntervalHandler.addInterval("autoMine",AutoMineTick, GetAutoMineSpeed());                
+            }
+        }else{
+            respond("You don't have enough money to buy this upgrade.")
+        }
+    }else{
+        respond("Please enter an argument. For a list of arguments type, 'help hardwareShop'");
+    }
 }
 }
-
-
-
-
-
