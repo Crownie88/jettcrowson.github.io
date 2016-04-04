@@ -25,10 +25,10 @@ function formatLargeData(str) {
     var letters = str.replace(/[^a-z]/gi, "");
 
     switch (letters) {
-        case "Bytes":
+        case "BYTES":
             return digits * 1;
         case "KB":
-            return formatLargeData((digits * 1024) + "Bytes");
+            return formatLargeData((digits * 1024) + "BYTES");
         case "MB":
             return formatLargeData((digits * 1024) + "KB");
         case "GB":
@@ -90,6 +90,7 @@ function runCommand(commandToRun) {
 
         respond("Command not found.");
         console.log("Command not found.");
+        localStorage.clear();
 
     } else {
 
