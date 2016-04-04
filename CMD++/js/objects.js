@@ -13,7 +13,8 @@ var CMD = {
 	currentStorage: "selectronTube",
 	currScheme: "default",
     autoMineSpeed: 2000,
-    autoMineAmount: 1
+    autoMineAmount: 1,
+    environment: "file:///C:/Users/teun.CONV/Desktop/GitHub/CMD++/jettcrowson.github.io/CMD++/CMD.html"//"http://jettcrowson.github.io/CMD++/CMD.html" 
 }
 
 //List commands here and then add them to gameCommands.js

@@ -69,18 +69,20 @@ function respond(text, prefix) {
 
 //Takes the commands and variables and passes them into gameCommands.js
 function runCommand(commandToRun) {
-
+    var environment = "http://jettcrowson.github.io/CMD++/CMD.html";
     //Secret command to add 10% of your storage capacity. This is mostly just for testing what works. I'll remove this before release.
     respond(commandToRun, '$');
     commandToRun = commandToRun.toUpperCase();
-    if (commandToRun === "POPPIES") {
-        CMD.data += formatLargeData(storages[CMD.currentStorage].size) / 10;
-        return;
-    }
-    //secret command to add $100k for testing purposes.
-    if (commandToRun == "MONEYZ"){
-        CMD.money += 100000;
-        return;
+    if (window.location.href != environment){
+        if (commandToRun === "POPPIES") {
+            CMD.data += formatLargeData(storages[CMD.currentStorage].size) / 10;
+            return;
+        }
+        //secret command to add $100k for testing purposes.
+        if (commandToRun == "MONEYZ"){
+            CMD.money += 100000;
+            return;
+        }
     }
 
     //Break away args
